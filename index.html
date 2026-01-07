@@ -6,6 +6,6 @@ function connectGoogle() {
         return;
     }
     // Railway URL твоего бэкенда
-    const backendUrl = "tgcall-production.up.railway.app"; 
+    const backendUrl = "https://tgcall-production.up.railway.app/"; 
     window.location.href = `${backendUrl}/auth/google/start?user_id=${userId}`;
 }
