@@ -3,11 +3,11 @@ function connectGoogle() {
     const userId = tg.initDataUnsafe?.user?.id;
     
     if (!userId) {
-        alert("Ошибка: откройте приложение через Telegram");
+        alert("Пожалуйста, откройте приложение через Telegram");
         return;
     }
 
-    // Ссылка теперь ведет на ваш домен в Railway
     const backendUrl = "https://tgcall-production.up.railway.app";
+    // Перенаправляем на авторизацию с передачей user_id
     window.location.href = `${backendUrl}/auth/google/start?user_id=${userId}`;
 }
