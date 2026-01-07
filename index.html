@@ -1,0 +1,11 @@
+function connectGoogle() {
+    const tg = window.Telegram.WebApp;
+    const userId = tg.initDataUnsafe?.user?.id;
+    if (!userId) {
+        alert("Запустите через Telegram!");
+        return;
+    }
+    // Railway URL твоего бэкенда
+    const backendUrl = "https://твое-приложение.up.railway.app"; 
+    window.location.href = `${backendUrl}/auth/google/start?user_id=${userId}`;
+}
