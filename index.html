@@ -1,11 +1,13 @@
 function connectGoogle() {
     const tg = window.Telegram.WebApp;
     const userId = tg.initDataUnsafe?.user?.id;
+    
     if (!userId) {
-        alert("Запустите через Telegram!");
+        alert("Ошибка: откройте приложение через Telegram");
         return;
     }
-    // Railway URL твоего бэкенда
-    const backendUrl = "https://tgcall-production.up.railway.app/"; 
+
+    // Ссылка теперь ведет на ваш домен в Railway
+    const backendUrl = "https://tgcall-production.up.railway.app";
     window.location.href = `${backendUrl}/auth/google/start?user_id=${userId}`;
 }
