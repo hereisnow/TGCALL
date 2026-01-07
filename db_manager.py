@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-# Путь к базе в корне проекта
+# Это гарантирует, что база всегда будет в корне проекта
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "database.db")
 
@@ -18,7 +18,6 @@ def init_db():
     conn.close()
 
 def save_token(tg_id, refresh_token):
-    # Используем переменную db_path, а не просто строку
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
     cur.execute("INSERT OR REPLACE INTO user_tokens (tg_id, refresh_token) VALUES (?, ?)", (tg_id, refresh_token))
