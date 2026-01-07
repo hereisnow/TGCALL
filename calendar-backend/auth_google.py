@@ -1,4 +1,9 @@
 import os
+import sys
+
+# Добавляем корневую папку в путь, чтобы видеть db_manager
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from google_auth_oauthlib.flow import Flow
@@ -27,20 +32,23 @@ def build_flow():
 async def google_start(user_id: str):
     flow = build_flow()
     flow.redirect_uri = GOOGLE_REDIRECT_URI
-    # Передаем user_id в state, чтобы получить его обратно в callback
     auth_url, _ = flow.authorization_url(access_type="offline", prompt="consent", state=user_id)
     return RedirectResponse(auth_url)
 
 @router.get("/auth/google/callback")
 async def google_callback(request: Request):
     code = request.query_params.get("code")
-    user_id = request.query_params.get("state") # Получаем ID пользователя обратно
+    user_id = request.query_params.get("state")
     
-    flow = build_flow()
-    flow.redirect_uri = GOOGLE_REDIRECT_URI
-    flow.fetch_token(code=code)
-    
-    # Сохраняем в базу данных
-    save_token(user_id, flow.credentials.refresh_token)
-    
-    return {"status": "success", "message": "Календарь успешно привязан! Вернитесь в бота."}
+    if not code or not user_id:
+        return {"error": "Нет кода или ID пользователя"}
+
+    try:
+        flow = build_flow()
+        flow.redirect_uri = GOOGLE_REDIRECT_URI
+        flow.fetch_token(code=code)
+        
+        save_token(user_id, flow.credentials.refresh_token)
+        return {"status": "success", "message": "Всё работает! Закройте окно."}
+    except Exception as e:
+        return {"error": str(e)}
